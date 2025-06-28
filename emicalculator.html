@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Professional EMI Calculator</title>
+<style>
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #f8f9fa;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    max-width: 600px;
+    margin: 40px auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    padding: 30px;
+    display: none;
+    transition: all 0.4s ease;
+  }
+  .container.active {
+    display: block;
+  }
+  h2 {
+    color: #007bff;
+    text-align: center;
+  }
+  .form-group {
+    margin-bottom: 20px;
+  }
+  label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+  input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  input.invalid, select.invalid {
+    border-color: red;
+  }
+  .btn {
+    background: #007bff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px 5px;
+  }
+  .btn:hover {
+    background: #0056b3;
+  }
+  .btn-secondary {
+    background: #6c757d;
+  }
+  .btn-secondary:hover {
+    background: #5a6268;
+  }
+  .warning {
+    color: #dc3545;
+    font-size: 0.9em;
+    margin-top: 5px;
+  }
+  .results {
+    text-align: center;
+  }
+  .results p {
+    font-size: 1.2em;
+    margin: 10px 0;
+  }
+  .button-group {
+    text-align: center;
+  }
+  #loanAmount::-webkit-outer-spin-button,
+  #loanAmount::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  #loanAmount {
+    -moz-appearance: textfield;
+  }
+</style>
+</head>
+<body>
+
+<div id="step1" class="container active">
+  <h2>Bank & Interest Details</h2>
+  <div class="form-group">
+    <label>Bank Name</label>
+    <select id="bankName" onchange="populateProcessingFee()">
+      <option value="">Select Bank</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Interest Calculation Type</label>
+    <select id="interestType">
+      <option value="simple">Simple Interest</option>
+      <option value="compound">Compound Interest</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Rate of Interest Type</label>
+    <select id="roiType" onchange="handleROITypeChange()">
+      <option value="flat">Flat Rate</option>
+      <option value="increasing">Increasing Rate</option>
+    </select>
+  </div>
+  <div class="form-group" id="avgIncreaseGroup" style="display:none;">
+    <label>Average Increase in ROI (%) per annum</label>
+    <input type="number" id="avgIncrease" value="0.5">
+    <div class="warning">* Average value with assumption, please change as required.</div>
+  </div>
+  <div class="button-group">
+    <button class="btn" onclick="showStep2()">Next</button>
+  </div>
+</div>
+
+<div id="step2" class="container">
+  <h2>Loan Details</h2>
+  <div class="form-group">
+    <label>Loan Amount <span style="color:red">*</span></label>
+    <input type="number" id="loanAmount" step="any">
+  </div>
+  <div class="form-group">
+    <label>Currency / Country <span style="color:red">*</span></label>
+    <select id="currency">
+      <option value="">Select currency code</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label>Annual Interest Rate (%) <span style="color:red">*</span></label>
+    <input type="number" id="interestRate" min="0.01">
+  </div>
+  <div class="form-group">
+    <label>Loan Tenure <span style="color:red">*</span></label>
+    <div style="display:flex; gap:10px;">
+      <input type="number" id="loanTenure" min="1">
+      <select id="tenureType">
+        <option value="years">Years</option>
+        <option value="months">Months</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label id="processingFeesLabel">Processing Fees</label>
+    <input type="text" id="processingFees" value="N/A">
+  </div>  
+  <div class="button-group">
+    <button class="btn btn-secondary" onclick="showStep1()">Back</button>
+    <button class="btn" onclick="calculateEMI()">Calculate EMI</button>
+  </div>
+</div>
+
+<div id="result" class="container">
+  <h2>EMI Calculation Result</h2>
+  <div class="results" id="results"></div>
+  <div class="button-group">
+    <button class="btn btn-secondary" onclick="showStep2()">Back</button>
+  </div>
+</div>
+
+<script>
+const currencies = [
+  { code: "AED", name: "united arab emirates dirham" },
+  { code: "AFN", name: "afghan afghani" },
+  { code: "ALL", name: "albanian lek" },
+  { code: "AMD", name: "armenian dram" },
+  { code: "ANG", name: "netherlands antillean guilder" },
+  { code: "AOA", name: "angolan kwanza" },
+  { code: "ARS", name: "argentine peso" },
+  { code: "AUD", name: "australian dollar" },
+  { code: "AWG", name: "aruban florin" },
+  { code: "AZN", name: "azerbaijani manat" },
+  { code: "BAM", name: "bosnia-herzegovina convertible mark" },
+  { code: "BBD", name: "barbadian dollar" },
+  { code: "BDT", name: "bangladeshi taka" },
+  { code: "BGN", name: "bulgarian lev" },
+  { code: "BHD", name: "bahraini dinar" },
+  { code: "BIF", name: "burundian franc" },
+  { code: "BMD", name: "bermudan dollar" },
+  { code: "BND", name: "brunei dollar" },
+  { code: "BOB", name: "bolivian boliviano" },
+  { code: "BRL", name: "brazilian real" },
+  { code: "BSD", name: "bahamian dollar" },
+  { code: "BTC", name: "bitcoin" },
+  { code: "BTN", name: "bhutanese ngultrum" },
+  { code: "BWP", name: "botswanan pula" },
+  { code: "BYN", name: "new belarusian ruble" },
+  { code: "BYR", name: "belarusian ruble" },
+  { code: "BZD", name: "belize dollar" },
+  { code: "CAD", name: "canadian dollar" },
+  { code: "CDF", name: "congolese franc" },
+  { code: "CHF", name: "swiss franc" },
+  { code: "CLF", name: "chilean unit of account (uf)" },
+  { code: "CLP", name: "chilean peso" },
+  { code: "CNY", name: "chinese yuan" },
+  { code: "COP", name: "colombian peso" },
+  { code: "CRC", name: "costa rican colón" },
+  { code: "CUC", name: "cuban convertible peso" },
+  { code: "CUP", name: "cuban peso" },
+  { code: "CVE", name: "cape verdean escudo" },
+  { code: "CZK", name: "czech republic koruna" },
+  { code: "DJF", name: "djiboutian franc" },
+  { code: "DKK", name: "danish krone" },
+  { code: "DOP", name: "dominican peso" },
+  { code: "DZD", name: "algerian dinar" },
+  { code: "EGP", name: "egyptian pound" },
+  { code: "ERN", name: "eritrean nakfa" },
+  { code: "ETB", name: "ethiopian birr" },
+  { code: "EUR", name: "euro" },
+  { code: "FJD", name: "fijian dollar" },
+  { code: "FKP", name: "falkland islands pound" },
+  { code: "GBP", name: "british pound sterling" },
+  { code: "GEL", name: "georgian lari" },
+  { code: "GGP", name: "guernsey pound" },
+  { code: "GHS", name: "ghanaian cedi" },
+  { code: "GIP", name: "gibraltar pound" },
+  { code: "GMD", name: "gambian dalasi" },
+  { code: "GNF", name: "guinean franc" },
+  { code: "GTQ", name: "guatemalan quetzal" },
+  { code: "GYD", name: "guyanaese dollar" },
+  { code: "HKD", name: "hong kong dollar" },
+  { code: "HNL", name: "honduran lempira" },
+  { code: "HRK", name: "croatian kuna" },
+  { code: "HTG", name: "haitian gourde" },
+  { code: "HUF", name: "hungarian forint" },
+  { code: "IDR", name: "indonesian rupiah" },
+  { code: "ILS", name: "israeli new sheqel" },
+  { code: "IMP", name: "manx pound" },
+  { code: "INR", name: "indian rupee" },
+  { code: "IQD", name: "iraqi dinar" },
+  { code: "IRR", name: "iranian rial" },
+  { code: "ISK", name: "icelandic króna" },
+  { code: "JEP", name: "jersey pound" },
+  { code: "JMD", name: "jamaican dollar" },
+  { code: "JOD", name: "jordanian dinar" },
+  { code: "JPY", name: "japanese yen" },
+  { code: "KES", name: "kenyan shilling" },
+  { code: "KGS", name: "kyrgystani som" },
+  { code: "KHR", name: "cambodian riel" },
+  { code: "KMF", name: "comorian franc" },
+  { code: "KPW", name: "north korean won" },
+  { code: "KRW", name: "south korean won" },
+  { code: "KWD", name: "kuwaiti dinar" },
+  { code: "KYD", name: "cayman islands dollar" },
+  { code: "KZT", name: "kazakhstani tenge" },
+  { code: "LAK", name: "laotian kip" },
+  { code: "LBP", name: "lebanese pound" },
+  { code: "LKR", name: "sri lankan rupee" },
+  { code: "LRD", name: "liberian dollar" },
+  { code: "LSL", name: "lesotho loti" },
+  { code: "LTL", name: "lithuanian litas" },
+  { code: "LVL", name: "latvian lats" },
+  { code: "LYD", name: "libyan dinar" },
+  { code: "MAD", name: "moroccan dirham" },
+  { code: "MDL", name: "moldovan leu" },
+  { code: "MGA", name: "malagasy ariary" },
+  { code: "MKD", name: "macedonian denar" },
+  { code: "MMK", name: "myanma kyat" },
+  { code: "MNT", name: "mongolian tugrik" },
+  { code: "MOP", name: "macanese pataca" },
+  { code: "MRO", name: "mauritanian ouguiya" },
+  { code: "MUR", name: "mauritian rupee" },
+  { code: "MVR", name: "maldivian rufiyaa" },
+  { code: "MWK", name: "malawian kwacha" },
+  { code: "MXN", name: "mexican peso" },
+  { code: "MYR", name: "malaysian ringgit" },
+  { code: "MZN", name: "mozambican metical" },
+  { code: "NAD", name: "namibian dollar" },
+  { code: "NGN", name: "nigerian naira" },
+  { code: "NIO", name: "nicaraguan córdoba" },
+  { code: "NOK", name: "norwegian krone" },
+  { code: "NPR", name: "nepalese rupee" },
+  { code: "NZD", name: "new zealand dollar" },
+  { code: "OMR", name: "omani rial" },
+  { code: "PAB", name: "panamanian balboa" },
+  { code: "PEN", name: "peruvian nuevo sol" },
+  { code: "PGK", name: "papua new guinean kina" },
+  { code: "PHP", name: "philippine peso" },
+  { code: "PKR", name: "pakistani rupee" },
+  { code: "PLN", name: "polish zloty" },
+  { code: "PYG", name: "paraguayan guarani" },
+  { code: "QAR", name: "qatari rial" },
+  { code: "RON", name: "romanian leu" },
+  { code: "RSD", name: "serbian dinar" },
+  { code: "RUB", name: "russian ruble" },
+  { code: "RWF", name: "rwandan franc" },
+  { code: "SAR", name: "saudi riyal" },
+  { code: "SBD", name: "solomon islands dollar" },
+  { code: "SCR", name: "seychellois rupee" },
+  { code: "SDG", name: "sudanese pound" },
+  { code: "SEK", name: "swedish krona" },
+  { code: "SGD", name: "singapore dollar" },
+  { code: "SHP", name: "saint helena pound" },
+  { code: "SLL", name: "sierra leonean leone" },
+  { code: "SOS", name: "somali shilling" },
+  { code: "SRD", name: "surinamese dollar" },
+  { code: "STD", name: "são tomé and príncipe dobra" },
+  { code: "SVC", name: "salvadoran colón" },
+  { code: "SYP", name: "syrian pound" },
+  { code: "SZL", name: "swazi lilangeni" },
+  { code: "THB", name: "thai baht" },
+  { code: "TJS", name: "tajikistani somoni" },
+  { code: "TMT", name: "turkmenistani manat" },
+  { code: "TND", name: "tunisian dinar" },
+  { code: "TOP", name: "tongan paʻanga" },
+  { code: "TRY", name: "turkish lira" },
+  { code: "TTD", name: "trinidad and tobago dollar" },
+  { code: "TWD", name: "new taiwan dollar" },
+  { code: "TZS", name: "tanzanian shilling" },
+  { code: "UAH", name: "ukrainian hryvnia" },
+  { code: "UGX", name: "ugandan shilling" },
+  { code: "USD", name: "united states dollar" },
+  { code: "UYU", name: "uruguayan peso" },
+  { code: "UZS", name: "uzbekistan som" },
+  { code: "VEF", name: "venezuelan bolívar fuerte" },
+  { code: "VND", name: "vietnamese dong" },
+  { code: "VUV", name: "vanuatu vatu" },
+  { code: "WST", name: "samoan tala" },
+  { code: "XAF", name: "cfa franc beac" },
+  { code: "XAG", name: "silver (troy ounce)" },
+  { code: "XAU", name: "gold (troy ounce)" },
+  { code: "XCD", name: "east caribbean dollar" },
+  { code: "XDR", name: "special drawing rights" },
+  { code: "XOF", name: "cfa franc bceao" },
+  { code: "XPF", name: "cfp franc" },
+  { code: "YER", name: "yemeni rial" },
+  { code: "ZAR", name: "south african rand" },
+  { code: "ZMK", name: "zambian kwacha (pre-2013)" },
+  { code: "ZMW", name: "zambian kwacha" },
+  { code: "ZWL", name: "zimbabwean dollar" },
+  { code: "Others", name: "Others" }
+];
+
+const banks = [
+  "HDFC Bank","State Bank of India","ICICI Bank","Citibank","HSBC","Barclays","Bank of America","JPMorgan Chase","Standard Chartered","Others"
+];
+const bankProcessingFees = {
+  "HDFC Bank": 3000,
+  "State Bank of India": 2500,
+  "ICICI Bank": 2800
+};
+
+window.onload = function() {
+  const bankSelect = document.getElementById("bankName");
+  banks.forEach(bank => {
+    let opt = document.createElement("option");
+    opt.value = bank;
+    opt.text = bank;
+    bankSelect.appendChild(opt);
+  });
+  const currencySelect = document.getElementById("currency");
+  currencies.forEach(c => {
+    let opt = document.createElement("option");
+    opt.value = c.code;
+    opt.textContent = `${c.name} (${c.code})`;
+    currencySelect.appendChild(opt);
+  });
+};
+
+function showStep1() {
+  document.getElementById("step1").classList.add("active");
+  document.getElementById("step2").classList.remove("active");
+  document.getElementById("result").classList.remove("active");
+}
+function showStep2() {
+  document.getElementById("step1").classList.remove("active");
+  document.getElementById("step2").classList.add("active");
+  document.getElementById("result").classList.remove("active");
+}
+function showResult() {
+  document.getElementById("step1").classList.remove("active");
+  document.getElementById("step2").classList.remove("active");
+  document.getElementById("result").classList.add("active");
+}
+function handleROITypeChange() {
+  const roiType = document.getElementById("roiType").value;
+  document.getElementById("avgIncreaseGroup").style.display = roiType === "increasing" ? "block" : "none";
+}
+function populateProcessingFee() {
+  const bank = document.getElementById("bankName").value;
+  const fee = bankProcessingFees[bank] || "N/A";
+  document.getElementById("processingFees").value = fee;
+}
+document.getElementById("currency").addEventListener("change", () => {
+  const currency = document.getElementById("currency").value || "N/A";
+  const label = currency === "N/A" ? "Processing Fees" : `Processing Fees in ${currency}`;
+  document.getElementById("processingFeesLabel").innerText = label;
+});
+
+function calculateEMI() {
+  const loanAmount = document.getElementById("loanAmount");
+  const currencyEl = document.getElementById("currency");
+  const interestRate = document.getElementById("interestRate");
+  const loanTenure = document.getElementById("loanTenure");
+
+  [loanAmount, currencyEl, interestRate, loanTenure].forEach(el => el.classList.remove("invalid"));
+
+  let valid = true;
+  if (!loanAmount.value) { loanAmount.classList.add("invalid"); valid = false; }
+  if (!currencyEl.value) { currencyEl.classList.add("invalid"); valid = false; }
+  if (!interestRate.value) { interestRate.classList.add("invalid"); valid = false; }
+  if (!loanTenure.value) { loanTenure.classList.add("invalid"); valid = false; }
+  if (!valid) {
+    alert("Please fill all mandatory fields.");
+    return;
+  }
+
+  const P = parseFloat(loanAmount.value);
+  let rate = parseFloat(interestRate.value);
+  const n = document.getElementById("tenureType").value === "years" ? parseFloat(loanTenure.value) * 12 : parseFloat(loanTenure.value);
+  const r = rate / (12 * 100);
+  const interestType = document.getElementById("interestType").value;
+  const roiType = document.getElementById("roiType").value;
+  const avgIncrease = parseFloat(document.getElementById("avgIncrease").value) || 0;
+  let processingFees = document.getElementById("processingFees").value.trim();
+  const currencyCode = currencyEl.value;
+  const currencySymbol = currencyCode ? currencyCode + " " : "";
+
+  if (roiType === "increasing") {
+    rate += avgIncrease * (n/12);
+  }
+
+  let EMI = 0, totalPayment = 0, totalInterest = 0;
+
+  if (interestType === "compound") {
+    EMI = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+    totalPayment = EMI * n;
+    totalInterest = totalPayment - P;
+  } else {
+    const SI = (P * rate * (n/12)) / 100;
+    totalPayment = P + SI;
+    EMI = totalPayment / n;
+    totalInterest = SI;
+  }
+
+  const processingFeesText = (processingFees === "" || processingFees === "N/A")
+    ? `<p><strong>Processing Fees:</strong> N/A</p>`
+    : `<p><strong>Processing Fees in ${currencyCode}:</strong> ${currencySymbol}${processingFees}</p>`;
+
+  document.getElementById("results").innerHTML = `
+    <p><strong>Monthly EMI:</strong> ${currencySymbol}${EMI.toFixed(2)}</p>
+    <p><strong>Total Payment:</strong> ${currencySymbol}${totalPayment.toFixed(2)}</p>
+    <p><strong>Total Interest:</strong> ${currencySymbol}${totalInterest.toFixed(2)}</p>
+    ${processingFeesText}
+  `;
+
+  showResult();
+}
+</script>
+</body>
+</html>

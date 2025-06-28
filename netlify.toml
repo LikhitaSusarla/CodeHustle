@@ -1,0 +1,4 @@
+[[redirects]]
+from = "/*"
+to = "/emicalculator.html"
+status = 200

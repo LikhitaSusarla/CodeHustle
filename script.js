@@ -198,5 +198,87 @@ function calculateEMI() {
     `<p><strong>Total Payment:</strong> ${totalPay.toFixed(2)}</p>` +
     `<p><strong>Total Interest:</strong> ${totalInt.toFixed(2)}</p>`;
 }
+// Like, comment, and rating DOM access
+document.addEventListener("DOMContentLoaded", () => {
+  const likeButton = document.getElementById('likeButton');
+  const likeCountSpan = document.getElementById('likeCount');
+  const commentsList = document.getElementById('commentsList');
+  const commentForm = document.getElementById('commentForm');
+  const commentInput = document.getElementById('commentInput');
+  const stars = document.querySelectorAll('#starRating span');
+  let selectedRating = 0;
+
+  // Load data
+  db.ref('reviews').once('value').then(snapshot => {
+    const data = snapshot.val();
+    if (data) {
+      if (data.likes !== undefined) likeCountSpan.textContent = data.likes;
+      if (data.comments) {
+        Object.values(data.comments).forEach(text => {
+          const div = document.createElement('div');
+          div.className = 'comment';
+          div.textContent = text;
+          commentsList.appendChild(div);
+        });
+      }
+      if (data.rating) {
+        selectedRating = data.rating;
+        highlightStars(selectedRating);
+      }
+    }
+  });
+
+  // Like handler
+  likeButton.addEventListener('click', () => {
+    let count = parseInt(likeCountSpan.textContent) || 0;
+    count++;
+    likeCountSpan.textContent = count;
+    db.ref('reviews/likes').set(count);
+  });
+
+  // Comment handler
+  commentForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const text = commentInput.value.trim();
+    if (text !== "") {
+      const newCommentRef = db.ref('reviews/comments').push();
+      newCommentRef.set(text);
+      const div = document.createElement('div');
+      div.className = 'comment';
+      div.textContent = text;
+      commentsList.prepend(div);
+      commentInput.value = "";
+    }
+  });
+
+  // Rating handler
+  stars.forEach(star => {
+    star.addEventListener('mouseover', () => {
+      resetStars();
+      highlightStars(star.dataset.value);
+    });
+    star.addEventListener('mouseout', () => {
+      resetStars();
+      if (selectedRating) highlightStars(selectedRating);
+    });
+    star.addEventListener('click', () => {
+      selectedRating = star.dataset.value;
+      db.ref('reviews/rating').set(selectedRating);
+      highlightStars(selectedRating);
+    });
+  });
+
+  function highlightStars(value) {
+    stars.forEach(star => {
+      if (star.dataset.value <= value) {
+        star.classList.add('selected');
+      }
+    });
+  }
+
+  function resetStars() {
+    stars.forEach(star => star.classList.remove('selected'));
+  }
+});
 
 

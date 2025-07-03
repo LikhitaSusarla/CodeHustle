@@ -1,97 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>EMI Calculator</title>
-        <link rel="stylesheet" href="styles.css">
-        <!-- Google Tag Manager -->
-        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-KTQHS654');
-        </script>
-        <!-- End Google Tag Manager -->
-        <!--  Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-37KJKTEWQE"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-37KJKTEWQE');
-        </script>
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9326851223304551"
-         crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script src="banks.js" defer></script>
-        <script src="currencies.js" defer></script>
-        <script src="script.js" defer></script>
-      </head>
-<body>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- ⭐️ MODIFIED TITLE WITH MORE KEYWORDS -->
+    <title><b>Easy EMI Calculator - Calculate Home, Car, Personal Loan EMIs in Any Currency</b></title>
+    
+    <!-- ⭐️ MODIFIED META DESCRIPTION -->
+    <meta name="description" content="<b>Use the Easy EMI Calculator to quickly calculate your monthly repayments for home loans, car loans, or personal loans. Supports multiple currencies, interest types, and detailed amortization schedules.</b>">
+    
+    <!-- ⭐️ MODIFIED META KEYWORDS -->
+    <meta name="keywords" content="<b>EMI calculator, loan calculator, home loan EMI, car loan EMI, personal loan EMI, easy emi calculator, loan repayment calculator, loan amortization, emi calculation online</b>">
+    
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-KTQHS654');
+    </script>
+    <!-- End Google Tag Manager -->
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-37KJKTEWQE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-37KJKTEWQE');
+    </script>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9326851223304551"
+     crossorigin="anonymous"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="banks.js" defer></script>
+    <script src="currencies.js" defer></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
     <!-- Google Tag Manager (noscript) -->
     <noscript>
-        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KTQHS654" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KTQHS654" height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>
-<!-- End Google Tag Manager (noscript) -->
+    <!-- End Google Tag Manager (noscript) -->
 
-  <!-- Step 1 -->
-  <div id="step1" class="container active">
-    <h2>Bank & Interest Details</h2>
-    <div class="form-group">
+    <!-- ⭐️ ADDED MAIN H1 FOR SEO -->
+    <h1><b>Easy EMI Calculator for Home, Car, and Personal Loans</b></h1>
+
+    <!-- Step 1 -->
+    <div id="step1" class="container active">
+      <h2>Bank & Interest Details</h2>
+      <div class="form-group">
         <label>Bank Name <small>(optional)</small></label>
         <select id="bankName">
           <option value="N/A" selected>N/A</option>
         </select>
+      </div>
+      <div class="form-group">
+        <label>Interest Calculation Type</label>
+        <select id="interestType">
+          <option value="simple">Simple Interest</option>
+          <option value="compound">Compound Interest</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Rate of Interest Type</label>
+        <select id="roiType">
+          <option value="flat">Flat Rate</option>
+          <option value="increasing">Increasing Rate</option>
+        </select>
+      </div>
+      <div class="form-group" id="avgIncreaseGroup" style="display:none;">
+        <label>Average Increase in ROI (%) per annum</label>
+        <input type="number" id="avgIncrease" value="0.5">
+        <div class="warning">* Average value with assumption, please change as required.</div>
+      </div>
+      <div class="button-group">
+        <button class="btn" onclick="showStep2()">Next</button>
+      </div>
     </div>
-    <div class="form-group">
-      <label>Interest Calculation Type</label>
-      <select id="interestType">
-        <option value="simple">Simple Interest</option>
-        <option value="compound">Compound Interest</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Rate of Interest Type</label>
-      <select id="roiType">
-        <option value="flat">Flat Rate</option>
-        <option value="increasing">Increasing Rate</option>
-      </select>
-    </div>
-    <div class="form-group" id="avgIncreaseGroup" style="display:none;">
-      <label>Average Increase in ROI (%) per annum</label>
-      <input type="number" id="avgIncrease" value="0.5">
-      <div class="warning">* Average value with assumption, please change as required.</div>
-    </div>
-    <div class="button-group">
-      <button class="btn" onclick="showStep2()">Next</button>
-    </div>
-  </div>
 
-  <!-- Step 2 -->
-  <div id="step2" class="container">
-    <h2>Loan Details</h2>
-    <div class="form-group">
+    <!-- Step 2 -->
+    <div id="step2" class="container">
+      <h2>Loan Details</h2>
+      <div class="form-group">
         <div class="loan-type-group" style="justify-content: center;">
           <label><input type="radio" name="loanType" value="home" checked> Home Loan</label>
           <label><input type="radio" name="loanType" value="car"> Car Loan</label>
           <label><input type="radio" name="loanType" value="personal"> Personal Loan</label>
         </div>
-    </div>
-    <div class="form-group">
+      </div>
+      <div class="form-group">
         <label>Loan Amount <span style="color: red;">*</span></label>
         <input type="number" id="loanAmount" min="0">
       </div>
-    <div class="form-group">
-      <label>Currency / Country <span style="color: red;">*</span></label>
-      <select id="currency"></select>
-    </div>
-    <div class="form-group">
+      <div class="form-group">
+        <label>Currency / Country <span style="color: red;">*</span></label>
+        <select id="currency"></select>
+      </div>
+      <div class="form-group">
         <label>Annual Interest Rate (%) <span style="color: red;">*</span>
           <input type="number" id="interestRate" min="5" max="25" step="0.1" style="width: 100px; margin-left: 10px;">
         </label>
         <input type="range" id="interestRateRange">
         <div class="slider-labels" id="interestLabels"></div>
       </div>
-
       <div class="form-group">
         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
           <label>Loan Tenure <span style="color: red;">*</span></label>
@@ -104,33 +118,46 @@
         <input type="range" id="tenureRange">
         <div class="slider-labels" id="tenureLabels"></div>
       </div>
+      <div class="form-group">
+        <label id="processingFeesLabel">Processing Fees</label>
+        <input type="text" id="processingFees" value="N/A">
+      </div>
+      <div class="button-group">
+        <button class="btn btn-secondary" onclick="showStep1()">Back</button>
+        <button class="btn" onclick="calculateEMI()">Calculate EMI</button>
+      </div>
+    </div>
 
-    <div class="form-group">
-      <label id="processingFeesLabel">Processing Fees</label>
-      <input type="text" id="processingFees" value="N/A">
+    <!-- Results -->
+    <div id="result" class="container">
+      <h2>EMI Calculation Result</h2>
+      <div class="results" id="results"></div>
+      <canvas id="paymentChart" width="200" height="200" style="display: block; margin: 0 auto;"></canvas>
+      <table id="amortTable">
+        <thead>
+          <tr>
+            <th>Year</th><th>Principal (A)</th><th>Interest (B)</th><th>Total (A+B)</th><th>Balance</th><th>Paid To Date</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="button-group">
+        <button class="btn btn-secondary" onclick="showStep2()">Back</button>
+      </div>
     </div>
-    <div class="button-group">
-      <button class="btn btn-secondary" onclick="showStep1()">Back</button>
-      <button class="btn" onclick="calculateEMI()">Calculate EMI</button>
-    </div>
-  </div>
 
-  <!-- Results -->
-  <div id="result" class="container">
-    <h2>EMI Calculation Result</h2>
-    <div class="results" id="results"></div>
-    <canvas id="paymentChart" width="200" height="200" style="display: block; margin: 0 auto;"></canvas>
-    <table id="amortTable">
-      <thead>
-        <tr>
-          <th>Year</th><th>Principal (A)</th><th>Interest (B)</th><th>Total (A+B)</th><th>Balance</th><th>Paid To Date</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-    <div class="button-group">
-      <button class="btn btn-secondary" onclick="showStep2()">Back</button>
-    </div>
-  </div>
-</body>
+    <!-- ⭐️ ADDED DESCRIPTIVE SEO TEXT BELOW RESULTS -->
+<div class="seo-text">
+  <p>
+    <strong>Easy EMI Calculator</strong> is your all-in-one online tool to calculate <a href="#emi">EMI</a> (Equated Monthly Installment) for <a href="#home-loan">home loans</a>, <a href="#car-loan">car loans</a>, and <a href="#personal-loan">personal loans</a>. Whether you need to understand your <strong>loan tenure</strong>, compare <strong>interest rates</strong>, or plan your <strong>repayment schedule</strong>, our calculator gives you precise results.
+  </p>
+  <p>
+    With support for multiple currencies and both <strong>simple</strong> and <strong>compound interest calculations</strong>, you can easily view your <strong>installment breakdown</strong>, including principal and interest components. Our tool generates an <strong>amortization schedule</strong> so you can track how much you have paid and how much remains.
+  </p>
+  <p>
+    Ready to get started? Enter your loan amount, tenure, and interest rate above, and click <strong>Calculate EMI</strong>. Discover how early repayments or different <strong>loan tenures</strong> impact your total repayment. Whether you are refinancing or planning a new loan, the Easy EMI Calculator makes it simple.
+  </p>
+</div>
+
+  </body>
 </html>

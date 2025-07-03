@@ -198,6 +198,7 @@ function calculateEMI() {
     `<p><strong>Total Payment:</strong> ${totalPay.toFixed(2)}</p>` +
     `<p><strong>Total Interest:</strong> ${totalInt.toFixed(2)}</p>`;
 }
+
 // Like, comment, and rating DOM access
 document.addEventListener("DOMContentLoaded", () => {
   const likeButton = document.getElementById('likeButton');
@@ -208,11 +209,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const stars = document.querySelectorAll('#starRating span');
   let selectedRating = 0;
 
-  // Load data
+  // Load existing data
   db.ref('reviews').once('value').then(snapshot => {
     const data = snapshot.val();
     if (data) {
-      if (data.likes !== undefined) likeCountSpan.textContent = data.likes;
+      // Likes
+      if (data.likes !== undefined) {
+        likeCountSpan.textContent = data.likes;
+      }
+      // Comments
       if (data.comments) {
         Object.values(data.comments).forEach(text => {
           const div = document.createElement('div');
@@ -221,6 +226,7 @@ document.addEventListener("DOMContentLoaded", () => {
           commentsList.appendChild(div);
         });
       }
+      // Ratings
       if (data.rating) {
         selectedRating = data.rating;
         highlightStars(selectedRating);
@@ -241,12 +247,16 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     const text = commentInput.value.trim();
     if (text !== "") {
+      // Save to Firebase
       const newCommentRef = db.ref('reviews/comments').push();
       newCommentRef.set(text);
+
+      // Show on page
       const div = document.createElement('div');
       div.className = 'comment';
       div.textContent = text;
       commentsList.prepend(div);
+
       commentInput.value = "";
     }
   });
@@ -280,5 +290,3 @@ document.addEventListener("DOMContentLoaded", () => {
     stars.forEach(star => star.classList.remove('selected'));
   }
 });
-
-

@@ -1,56 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Easy EMI Calculator - Calculate Home, Car, Personal Loan EMIs in Any Currency</title>
-  <meta name="description" content="Use the Easy EMI Calculator to quickly calculate your monthly repayments for home loans, car loans, or personal loans. Supports multiple currencies, interest types, and detailed amortization schedules." />
-  <meta name="keywords" content="EMI calculator, loan calculator, home loan EMI, car loan EMI, personal loan EMI, easy emi calculator, loan repayment calculator, loan amortization, emi calculation online" />
-  <link rel="stylesheet" href="styles.css" />
-
-  <!-- Firebase App (the core Firebase SDK) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<!-- Firebase Realtime Database -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyA9Zo9XVW5pUow49EZGWlmGckrjORaO7j0",
-    authDomain: "easyemicalculator-956c2.firebaseapp.com",
-    databaseURL: "https://easyemicalculator-956c2-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "easyemicalculator-956c2",
-    storageBucket: "easyemicalculator-956c2.appspot.com",
-    messagingSenderId: "834441212149",
-    appId: "1:834441212149:web:a1371cf19baee7cf5115bc",
-    measurementId: "G-WENZWV3L04"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
-</script>
-
-  <!-- Google Tag Manager -->  
-  <script>
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
-      var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
-      j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
-      f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-KTQHS654');
-  </script>
-  <!-- End Google Tag Manager -->
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-37KJKTEWQE"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-37KJKTEWQE');
-  </script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9326851223304551" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="banks.js" defer></script>
-  <script src="currencies.js" defer></script>
-  <script src="script.js" defer></script>
-
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Easy EMI Calculator - Calculate Home, Car, Personal Loan EMIs in Any Currency</title>
+    <meta name="description" content="Use the Easy EMI Calculator to quickly calculate your monthly repayments for home loans, car loans, or personal loans. Supports multiple currencies, interest types, and detailed amortization schedules." />
+    <meta name="keywords" content="EMI calculator, loan calculator, home loan EMI, car loan EMI, personal loan EMI, easy emi calculator, loan repayment calculator, loan amortization, emi calculation online" />
+    <link rel="stylesheet" href="styles.css" />
+  
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <!-- Firebase Realtime Database -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyA9Zo9XVW5pUow49EZGWlmGckrjORaO7j0",
+        authDomain: "easyemicalculator-956c2.firebaseapp.com",
+        databaseURL: "https://easyemicalculator-956c2-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "easyemicalculator-956c2",
+        storageBucket: "easyemicalculator-956c2.appspot.com",
+        messagingSenderId: "834441212149",
+        appId: "1:834441212149:web:a1371cf19baee7cf5115bc",
+        measurementId: "G-WENZWV3L04"
+      };
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.database();
+    </script>
+  
+    <script src="banks.js" defer></script>
+    <script src="currencies.js" defer></script>
+    <script src="script.js" defer></script>
+  </head>
 <body>
   <!-- Google Tag Manager (noscript) -->
   <noscript>

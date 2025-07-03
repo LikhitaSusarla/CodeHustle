@@ -1,163 +1,263 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- ⭐️ MODIFIED TITLE WITH MORE KEYWORDS -->
-    <title><b>Easy EMI Calculator - Calculate Home, Car, Personal Loan EMIs in Any Currency</b></title>
-    
-    <!-- ⭐️ MODIFIED META DESCRIPTION -->
-    <meta name="description" content="<b>Use the Easy EMI Calculator to quickly calculate your monthly repayments for home loans, car loans, or personal loans. Supports multiple currencies, interest types, and detailed amortization schedules.</b>">
-    
-    <!-- ⭐️ MODIFIED META KEYWORDS -->
-    <meta name="keywords" content="<b>EMI calculator, loan calculator, home loan EMI, car loan EMI, personal loan EMI, easy emi calculator, loan repayment calculator, loan amortization, emi calculation online</b>">
-    
-    <link rel="stylesheet" href="styles.css">
-    
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-KTQHS654');
-    </script>
-    <!-- End Google Tag Manager -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Easy EMI Calculator - Calculate Home, Car, Personal Loan EMIs in Any Currency</title>
+  <meta name="description" content="Use the Easy EMI Calculator to quickly calculate your monthly repayments for home loans, car loans, or personal loans. Supports multiple currencies, interest types, and detailed amortization schedules." />
+  <meta name="keywords" content="EMI calculator, loan calculator, home loan EMI, car loan EMI, personal loan EMI, easy emi calculator, loan repayment calculator, loan amortization, emi calculation online" />
+  <link rel="stylesheet" href="styles.css" />
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-37KJKTEWQE"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-37KJKTEWQE');
-    </script>
+  <!-- Firebase App (the core Firebase SDK) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<!-- Firebase Realtime Database -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyA9Zo9XVW5pUow49EZGWlmGckrjORaO7j0",
+    authDomain: "easyemicalculator-956c2.firebaseapp.com",
+    databaseURL: "https://easyemicalculator-956c2-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "easyemicalculator-956c2",
+    storageBucket: "easyemicalculator-956c2.appspot.com",
+    messagingSenderId: "834441212149",
+    appId: "1:834441212149:web:a1371cf19baee7cf5115bc",
+    measurementId: "G-WENZWV3L04"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+</script>
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9326851223304551"
-     crossorigin="anonymous"></script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="banks.js" defer></script>
-    <script src="currencies.js" defer></script>
-    <script src="script.js" defer></script>
-  </head>
-  <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript>
-      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KTQHS654" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <!-- End Google Tag Manager (noscript) -->
+  <!-- Google Tag Manager -->  
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
+      var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+      j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+      f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KTQHS654');
+  </script>
+  <!-- End Google Tag Manager -->
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-37KJKTEWQE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-37KJKTEWQE');
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9326851223304551" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="banks.js" defer></script>
+  <script src="currencies.js" defer></script>
+  <script src="script.js" defer></script>
 
-    <!-- ⭐️ ADDED MAIN H1 FOR SEO -->
-    <h1><b>Easy EMI Calculator for Home, Car, and Personal Loans</b></h1>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KTQHS654"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
 
-    <!-- Step 1 -->
-    <div id="step1" class="container active">
-      <h2>Bank & Interest Details</h2>
-      <div class="form-group">
-        <label>Bank Name <small>(optional)</small></label>
-        <select id="bankName">
-          <option value="N/A" selected>N/A</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Interest Calculation Type</label>
-        <select id="interestType">
-          <option value="simple">Simple Interest</option>
-          <option value="compound">Compound Interest</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Rate of Interest Type</label>
-        <select id="roiType">
-          <option value="flat">Flat Rate</option>
-          <option value="increasing">Increasing Rate</option>
-        </select>
-      </div>
-      <div class="form-group" id="avgIncreaseGroup" style="display:none;">
-        <label>Average Increase in ROI (%) per annum</label>
-        <input type="number" id="avgIncrease" value="0.5">
-        <div class="warning">* Average value with assumption, please change as required.</div>
-      </div>
-      <div class="button-group">
-        <button class="btn" onclick="showStep2()">Next</button>
+  <!-- Main Heading -->
+  <h1>Easy EMI Calculator for Home, Car, and Personal Loans</h1>
+
+  <!-- Step 1 -->
+  <div id="step1" class="container active">
+    <h2>Bank & Interest Details</h2>
+    <div class="form-group">
+      <label>Bank Name <small>(optional)</small></label>
+      <select id="bankName">
+        <option value="N/A" selected>N/A</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Interest Calculation Type</label>
+      <select id="interestType">
+        <option value="simple">Simple Interest</option>
+        <option value="compound">Compound Interest</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Rate of Interest Type</label>
+      <select id="roiType">
+        <option value="flat">Flat Rate</option>
+        <option value="increasing">Increasing Rate</option>
+      </select>
+    </div>
+    <div class="form-group" id="avgIncreaseGroup" style="display:none;">
+      <label>Average Increase in ROI (%) per annum</label>
+      <input type="number" id="avgIncrease" value="0.5">
+      <div class="warning">* Average value with assumption, please change as required.</div>
+    </div>
+    <div class="button-group">
+      <button class="btn" onclick="showStep2()">Next</button>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div id="step2" class="container">
+    <h2>Loan Details</h2>
+    <div class="form-group">
+      <div class="loan-type-group" style="justify-content: center;">
+        <label><input type="radio" name="loanType" value="home" checked> Home Loan</label>
+        <label><input type="radio" name="loanType" value="car"> Car Loan</label>
+        <label><input type="radio" name="loanType" value="personal"> Personal Loan</label>
       </div>
     </div>
-
-    <!-- Step 2 -->
-    <div id="step2" class="container">
-      <h2>Loan Details</h2>
-      <div class="form-group">
-        <div class="loan-type-group" style="justify-content: center;">
-          <label><input type="radio" name="loanType" value="home" checked> Home Loan</label>
-          <label><input type="radio" name="loanType" value="car"> Car Loan</label>
-          <label><input type="radio" name="loanType" value="personal"> Personal Loan</label>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Loan Amount <span style="color: red;">*</span></label>
-        <input type="number" id="loanAmount" min="0">
-      </div>
-      <div class="form-group">
-        <label>Currency / Country <span style="color: red;">*</span></label>
-        <select id="currency"></select>
-      </div>
-      <div class="form-group">
-        <label>Annual Interest Rate (%) <span style="color: red;">*</span>
-          <input type="number" id="interestRate" min="5" max="25" step="0.1" style="width: 100px; margin-left: 10px;">
-        </label>
-        <input type="range" id="interestRateRange">
-        <div class="slider-labels" id="interestLabels"></div>
-      </div>
-      <div class="form-group">
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-          <label>Loan Tenure <span style="color: red;">*</span></label>
-          <input type="number" id="loanTenure" min="0" step="1" style="width: 100px;">
-          <select id="tenureType" style="width: 100px;">
-            <option value="years" selected>Years</option>
-            <option value="months">Months</option>
-          </select>
-        </div>
-        <input type="range" id="tenureRange">
-        <div class="slider-labels" id="tenureLabels"></div>
-      </div>
-      <div class="form-group">
-        <label id="processingFeesLabel">Processing Fees</label>
-        <input type="text" id="processingFees" value="N/A">
-      </div>
-      <div class="button-group">
-        <button class="btn btn-secondary" onclick="showStep1()">Back</button>
-        <button class="btn" onclick="calculateEMI()">Calculate EMI</button>
-      </div>
+    <div class="form-group">
+      <label>Loan Amount <span style="color: red;">*</span></label>
+      <input type="number" id="loanAmount" min="0">
     </div>
-
-    <!-- Results -->
-    <div id="result" class="container">
-      <h2>EMI Calculation Result</h2>
-      <div class="results" id="results"></div>
-      <canvas id="paymentChart" width="200" height="200" style="display: block; margin: 0 auto;"></canvas>
-      <table id="amortTable">
-        <thead>
-          <tr>
-            <th>Year</th><th>Principal (A)</th><th>Interest (B)</th><th>Total (A+B)</th><th>Balance</th><th>Paid To Date</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-      <div class="button-group">
-        <button class="btn btn-secondary" onclick="showStep2()">Back</button>
-      </div>
+    <div class="form-group">
+      <label>Currency / Country <span style="color: red;">*</span></label>
+      <select id="currency"></select>
     </div>
+    <div class="form-group">
+      <label>Annual Interest Rate (%) <span style="color: red;">*</span>
+        <input type="number" id="interestRate" min="5" max="25" step="0.1" style="width: 100px; margin-left: 10px;">
+      </label>
+      <input type="range" id="interestRateRange">
+      <div class="slider-labels" id="interestLabels"></div>
+    </div>
+    <div class="form-group">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+        <label>Loan Tenure <span style="color: red;">*</span></label>
+        <input type="number" id="loanTenure" min="0" step="1" style="width: 100px;">
+        <select id="tenureType" style="width: 100px;">
+          <option value="years" selected>Years</option>
+          <option value="months">Months</option>
+        </select>
+      </div>
+      <input type="range" id="tenureRange">
+      <div class="slider-labels" id="tenureLabels"></div>
+    </div>
+    <div class="form-group">
+      <label id="processingFeesLabel">Processing Fees</label>
+      <input type="text" id="processingFees" value="N/A">
+    </div>
+    <div class="button-group">
+      <button class="btn btn-secondary" onclick="showStep1()">Back</button>
+      <button class="btn" onclick="calculateEMI()">Calculate EMI</button>
+    </div>
+  </div>
 
-    <!-- ⭐️ ADDED DESCRIPTIVE SEO TEXT BELOW RESULTS -->
-<div class="seo-text">
-  <p>
-    <strong>Easy EMI Calculator</strong> is your all-in-one online tool to calculate <a href="#emi">EMI</a> (Equated Monthly Installment) for <a href="#home-loan">home loans</a>, <a href="#car-loan">car loans</a>, and <a href="#personal-loan">personal loans</a>. Whether you need to understand your <strong>loan tenure</strong>, compare <strong>interest rates</strong>, or plan your <strong>repayment schedule</strong>, our calculator gives you precise results.
-  </p>
-  <p>
-    With support for multiple currencies and both <strong>simple</strong> and <strong>compound interest calculations</strong>, you can easily view your <strong>installment breakdown</strong>, including principal and interest components. Our tool generates an <strong>amortization schedule</strong> so you can track how much you have paid and how much remains.
-  </p>
-  <p>
-    Ready to get started? Enter your loan amount, tenure, and interest rate above, and click <strong>Calculate EMI</strong>. Discover how early repayments or different <strong>loan tenures</strong> impact your total repayment. Whether you are refinancing or planning a new loan, the Easy EMI Calculator makes it simple.
-  </p>
+  <!-- Results -->
+  <div id="result" class="container">
+    <h2>EMI Calculation Result</h2>
+    <div class="results" id="results"></div>
+    <canvas id="paymentChart" width="200" height="200" style="display: block; margin: 0 auto;"></canvas>
+    <table id="amortTable">
+      <thead>
+        <tr>
+          <th>Year</th><th>Principal (A)</th><th>Interest (B)</th><th>Total (A+B)</th><th>Balance</th><th>Paid To Date</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div class="button-group">
+      <button class="btn btn-secondary" onclick="showStep2()">Back</button>
+    </div>
+  </div>
+
+  <!-- SEO Blog-style Description -->
+  <div class="seo-text">
+    <p>
+      Easy EMI Calculator is your trusted online tool to calculate <a href="https://en.wikipedia.org/wiki/Equated_monthly_installment" target="_blank">EMI</a> (Equated Monthly Installment) for <a href="https://en.wikipedia.org/wiki/Home_equity_loan" target="_blank">home loans</a>, <a href="https://en.wikipedia.org/wiki/Car_finance" target="_blank">car loans</a>, and <a href="https://en.wikipedia.org/wiki/Personal_loan" target="_blank">personal loans</a>. Whether you want to explore your <a href="https://en.wikipedia.org/wiki/Amortization_(business)" target="_blank">loan tenure</a>, compare <a href="https://en.wikipedia.org/wiki/Interest_rate" target="_blank">interest rates</a>, or understand your <a href="https://en.wikipedia.org/wiki/Amortization_schedule" target="_blank">amortization schedule</a>, this calculator provides clear and accurate results instantly.
+    </p>
+    <p>
+      What makes this EMI calculator unique is its flexibility and support for multiple currencies. Whether you are borrowing in INR, USD, EUR, or any other currency, you can get precise calculations that adapt to your specific loan terms. Our tool also allows you to choose between simple and compound interest types, giving you full control over your financial planning.
+    </p>
+    <p>
+      Unlike many generic calculators, Easy EMI Calculator provides a detailed amortization table so you can see exactly how your repayments are distributed over time. This transparency helps you make confident decisions, anticipate future payments, and explore the impact of early repayments or different loan tenures.
+    </p>
+    <p>
+      We designed this platform to be user-friendly, fast, and reliable. Whether you are a first-time borrower or an experienced investor comparing loan options, our calculator empowers you with the knowledge to make informed choices. No sign-up, no hidden fees—just a clean, accurate, and helpful experience.
+    </p>
+  </div>
+
+  <!-- Rating Section -->
+<div class="rating-section">
+  <h2>Rate This Calculator</h2>
+  <div class="stars" id="starRating">
+    <span data-value="1">&#9733;</span>
+    <span data-value="2">&#9733;</span>
+    <span data-value="3">&#9733;</span>
+    <span data-value="4">&#9733;</span>
+    <span data-value="5">&#9733;</span>
+  </div>
+  <button class="btn like-btn" id="likeButton">👍 Like</button>
+  <span id="likeCount">0</span> Likes
 </div>
 
-  </body>
+<!-- Comments Section -->
+<div class="comments-section">
+  <h2>Leave a Comment</h2>
+  <form id="commentForm">
+    <textarea id="commentInput" placeholder="Write your comment here..."></textarea>
+    <button class="btn" type="submit">Post Comment</button>
+  </form>
+  <div id="commentsList"></div>
+</div>
+
+<script>
+  // Handle rating stars
+  const stars = document.querySelectorAll('#starRating span');
+  stars.forEach(star => {
+    star.addEventListener('mouseover', () => {
+      resetStars();
+      highlightStars(star.dataset.value);
+    });
+    star.addEventListener('mouseout', () => {
+      resetStars();
+      if (selectedRating) highlightStars(selectedRating);
+    });
+    star.addEventListener('click', () => {
+      selectedRating = star.dataset.value;
+      highlightStars(selectedRating);
+    });
+  });
+
+  let selectedRating = 0;
+
+  function highlightStars(value) {
+    stars.forEach(star => {
+      if (star.dataset.value <= value) {
+        star.classList.add('selected');
+      }
+    });
+  }
+
+  function resetStars() {
+    stars.forEach(star => star.classList.remove('selected'));
+  }
+
+  // Handle like button
+  let likeCount = 0;
+  const likeButton = document.getElementById('likeButton');
+  const likeCountSpan = document.getElementById('likeCount');
+
+  likeButton.addEventListener('click', () => {
+    likeCount++;
+    likeCountSpan.textContent = likeCount;
+  });
+
+  // Handle comments
+  const commentForm = document.getElementById('commentForm');
+  const commentInput = document.getElementById('commentInput');
+  const commentsList = document.getElementById('commentsList');
+
+  commentForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const text = commentInput.value.trim();
+    if (text !== "") {
+      const div = document.createElement('div');
+      div.className = 'comment';
+      div.textContent = text;
+      commentsList.prepend(div);
+      commentInput.value = "";
+    }
+  });
+</script>
+</body>
 </html>
